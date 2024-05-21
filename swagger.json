@@ -1,0 +1,366 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "This is a sample server Petstore server. You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/). For this sample, you can use the api key special-key to test the authorization filters.",
+    "version": "1.0.0",
+    "title": "COURSE MANAGEMENT API",
+    "contact": {
+      "email": "rukundorca@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "tags": [
+      {
+        "name": "student",
+        "description": "Everything about Courses in The school",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://swagger.io"
+        }
+      }
+    ]
+  },
+  "paths": {
+    "/api/auth": {
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Authenticate Student",
+        "description": "Authenticates a student by validating the email and password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "abc@gmail.com",
+                    "format": "email",
+                    "description": "Student Email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "abc240",
+                    "format": "password",
+                    "description": "User password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "JWT token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/course": {
+      "post": {
+        "tags": ["Courses"],
+        "summary": "Creating a new course in DB",
+        "description": "Posting by name, instructor and NoOfPeriods.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Physics",
+                    "description": "Course Title"
+                  },
+                  "instructor": {
+                    "type": "string",
+                    "example": "Babalao",
+                    "description": "Course instructor "
+                  },
+                  "NoOfperiods": {
+                    "type": "number",
+                    "example": 200,
+                    "description": "Course NoOfPeriods"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Course created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "Course created successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Courses"],
+        "summary": "Get all Courses",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Course"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Courses"],
+        "summary": "Update a course",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the course to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "CALL ME",
+                    "description": "The updated name of the course"
+                  },
+                  "instructor": {
+                    "type": "string",
+                    "example": "Babalao",
+                    "description": "Course instructor"
+                  },
+                  "NoOfPeriods": {
+                    "type": "number",
+                    "example": 200,
+                    "description": "Course NoOfPeriods"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Course"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Course not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Courses"],
+        "summary": "Delete a course",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the course to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Course not found"
+          }
+        }
+      }
+    },
+    "/api/student": {
+      "get": {
+        "tags": ["student"],
+        "summary": "Find all students",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findAllStudents",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/student" }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid status value" }
+        }
+      },
+      "post": {
+        "tags": ["student"],
+        "summary": "Create a new student",
+        "description": "API to enter new students into the system",
+        "operationId": "createStudent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/definitions/StudentRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/definitions/student" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Course": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "instructor": {
+          "type": "string"
+        },
+        "NoOfperiods": {
+          "type": "number"
+        }
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "StudentRequest": {
+      "type": "object",
+      "properties": {
+        "fname": {
+          "type": "string"
+        },
+        "lname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      },
+      "required": ["fname", "lname", "email", "password"]
+    },
+    "student": {
+      "type": "object",
+      "properties": {
+        "fname": {
+          "type": "string"
+        },
+        "lname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "JWTAuth": {
+        "type": "apiKey",
+        "name": "x-auth-token",
+        "in": "header"
+      }
+    
+    }
+  }
+}

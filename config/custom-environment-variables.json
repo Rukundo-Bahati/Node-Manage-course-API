@@ -1,0 +1,4 @@
+{
+  "SALT": "BCRYPTSALT",
+  "STUDENTPRIVATEKEY" : "jwtPivateKey"
+}
